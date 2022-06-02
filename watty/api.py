@@ -2,7 +2,7 @@
 from requests import get
 from datetime import datetime
 
-
+from .util import timestamp_milli_to_datetime, datetime_to_timestamp_milli
 
 class Watty:
     def __init__(self, country: str = "de") -> None:
@@ -89,11 +89,11 @@ class Price:
 
     @property
     def start_date(self) -> datetime:
-        return self._epoch_to_date(self.start_timestamp/1000)
+        return timestamp_milli_to_datetime(self.start_timestamp)
 
     @property
     def end_date(self) -> datetime:
-        return self._epoch_to_date(self.end_timestamp/1000)
+        return timestamp_milli_to_datetime(self.start_timestamp)
     
     def to_dict(self) -> dict:
         """Get the full response as dictionary
@@ -102,18 +102,15 @@ class Price:
             dict: Response
         """
         return self._response
-    
-    def _epoch_to_date(self, epoch: int) -> datetime:
-        return datetime.utcfromtimestamp(epoch)
 
 
-def get_prices(country: str = "de", start_timestamp = None, end_timestamp = None) -> list:
+def get_prices(country: str = "de", start_timestamp: datetime = None, end_timestamp: datetime = None) -> list:
     """Wrapper arount the Watty.request method.
 
     Args:
         country (str, optional): Country to get prices from ("de" or "at"). Defaults to "de".
-        start_timestamp (_type_, optional): Epochseconds incl. milliseconds. Defaults to None.
-        end_timestamp (_type_, optional): Epochseconds incl. milliseconds. Defaults to None.
+        start_timestamp (int|datetime, optional): Epochseconds incl. milliseconds. Defaults to None.
+        end_timestamp (int|datetime, optional): Epochseconds incl. milliseconds. Defaults to None.
 
     Returns:
         list: List of Price objects
@@ -125,7 +122,7 @@ def get_prices(country: str = "de", start_timestamp = None, end_timestamp = None
         exit()
     
     if start_timestamp is not None or end_timestamp is not None:
-        price_list = watty.request(start_timestamp, end_timestamp)
+        price_list = watty.request(datetime_to_timestamp_milli(start_timestamp), datetime_to_timestamp_milli(end_timestamp))
     else:
         price_list = watty.request()
 
