@@ -29,7 +29,7 @@ with open("README.md", "r") as f:
 # --- setting up ---
 setup(
     name="watty",
-    version='0.1.1',
+    version='0.1.2',
     author="aaronlyy (Aaron Levi)",
     author_email="<aaronlevican@gmail.com>",
     url="https://github.com/aaronlyy/watty",

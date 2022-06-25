@@ -1,1 +1,1 @@
-from .api import Watty, WattyResponse, get_prices
+from .api import Watty, Price, get_prices
